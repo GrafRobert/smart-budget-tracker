@@ -18,20 +18,20 @@ export default function Dashboard({transactions}: Props) {
     const balance = totalIncome - totalExpense;
 
    return (
-    <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px', marginBottom: '20px', background: '#f9f9f9' }}>
-      <h2>Dashboard (Statistici)</h2>
-      <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '18px' }}>
-        <div>
-          <strong>Venituri: </strong>
-          <span style={{ color: 'green' }}>{totalIncome} RON</span>
+    <div className="card">
+      <h2 className="card-title">Dashboard</h2>
+      <div className="dashboard-grid">
+        <div className="stat-box">
+          <span className="stat-label">Venituri</span>
+          <span className="stat-value text-income">{totalIncome} RON</span>
         </div>
-        <div>
-          <strong>Cheltuieli: </strong>
-          <span style={{ color: 'red' }}>{totalExpense} RON</span>
+        <div className="stat-box">
+          <span className="stat-label">Cheltuieli</span>
+          <span className="stat-value text-expense">{totalExpense} RON</span>
         </div>
-        <div>
-          <strong>Balanță: </strong>
-          <span style={{ fontWeight: 'bold' }}>{balance} RON</span>
+        <div className="stat-box">
+          <span className="stat-label">Balanță</span>
+          <span className="stat-value">{balance} RON</span>
         </div>
       </div>
     </div>

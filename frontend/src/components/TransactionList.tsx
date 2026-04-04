@@ -6,37 +6,46 @@ interface Props {
 }
 
 export default function TransactionList({ transactions, onDelete }: Props) {
-    return (
-    <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
-      <h2>Lista Tranzacții</h2>
-      <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
+   return (
+    <div className="card">
+      <h2 className="card-title">Istoric Tranzacții</h2>
+      <table className="data-table">
         <thead>
-          <tr style={{ borderBottom: '2px solid #eee' }}>
+          <tr>
             <th>Data</th>
             <th>Descriere</th>
             <th>Categorie</th>
             <th>Sumă</th>
+            <th>Acțiuni</th>
           </tr>
         </thead>
         <tbody>
           {transactions.map((t) => (
-            <tr key={t.id} style={{ borderBottom: '1px solid #eee' }}>
+            <tr key={t.id}>
               <td>{t.date}</td>
-              <td>{t.description}</td>
-              <td>{t.category.name} ({t.category.type === 'income' ? 'Venit' : 'Cheltuială'})</td>
-              <td style={{ color: t.category.type === 'income' ? 'green' : 'red', fontWeight: 'bold' }}>
-                {t.amount} RON
+              <td><strong>{t.description}</strong></td>
+              <td>
+                <span className="badge">
+                  {t.category.name}
+                </span>
+              </td>
+              <td className={t.category.type === 'income' ? 'text-income' : 'text-expense'} style={{ fontWeight: 'bold' }}>
+                {t.category.type === 'income' ? '+' : '-'}{t.amount} RON
               </td>
               <td>
-                <button 
-                  onClick={() => onDelete(t.id)} 
-                  style={{ background: '#dc3545', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}
-                >
+                <button onClick={() => onDelete(t.id)} className="btn-danger">
                   Șterge
                 </button>
               </td>
             </tr>
           ))}
+          {transactions.length === 0 && (
+            <tr>
+              <td colSpan={5} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '20px' }}>
+                Nu există nicio tranzacție momentan.
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

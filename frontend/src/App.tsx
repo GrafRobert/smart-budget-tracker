@@ -3,7 +3,7 @@ import type { Transaction } from "./types";
 import Dashboard from "./components/Dashboard";
 import TransactionForm from "./components/TransactionForm";
 import TransactionList from "./components/TransactionList";
-
+import './index.css';
 
 function App() {
 
@@ -42,17 +42,14 @@ function App() {
 
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', fontFamily: 'sans-serif' }}>
-      <h1>Smart Budget Tracker</h1>
-      
-
+    <div className="app-container">
+      <h1 className="title">Smart Budget Tracker</h1>
       <Dashboard transactions={transactions} />
-      <TransactionForm
-      onTransactionAdded={(newTx) => setTransactions([...transactions, newTx])}
-       />
+      <TransactionForm 
+      onTransactionAdded={(newTx) => setTransactions([...transactions, newTx])} 
+      />
       <TransactionList 
-        transactions={transactions} 
-        onDelete={handleDelete} 
+      transactions={transactions} onDelete={handleDelete} 
       />
     </div>
   );

@@ -67,14 +67,15 @@ export default function TransactionForm({ onTransactionAdded}: Props) {
     }
 
     return (
-    <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
-      <h2>Adaugă Tranzacție</h2>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+    <div className="card">
+      <h2 className="card-title">Adaugă Tranzacție</h2>
+      <form onSubmit={handleSubmit} className="form-grid">
         <input 
           type="date" 
           value={date} 
           onChange={(e) => setDate(e.target.value)} 
           required 
+          className="form-input"
         />
         <input 
           type="text" 
@@ -82,6 +83,7 @@ export default function TransactionForm({ onTransactionAdded}: Props) {
           value={description} 
           onChange={(e) => setDescription(e.target.value)} 
           required 
+          className="form-input"
         />
         <input 
           type="number" 
@@ -89,15 +91,21 @@ export default function TransactionForm({ onTransactionAdded}: Props) {
           value={amount} 
           onChange={(e) => setAmount(e.target.value)} 
           required 
+          className="form-input"
         />
-        <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
+        <select 
+          value={categoryId} 
+          onChange={(e) => setCategoryId(e.target.value)} 
+          required 
+          className="form-input"
+        >
           {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>
-              {cat.name} ({cat.type})
+              {cat.name} ({cat.type === 'income' ? 'Venit' : 'Cheltuială'})
             </option>
           ))}
         </select>
-        <button type="submit" style={{ background: '#007bff', color: 'white', border: 'none', padding: '5px 15px', borderRadius: '4px', cursor: 'pointer' }}>
+        <button type="submit" className="btn-primary">
           Adaugă
         </button>
       </form>

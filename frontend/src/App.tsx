@@ -25,6 +25,20 @@ function App() {
     fetchTransactions();
   }, []);
 
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/transactions/${id}/`, {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        setTransactions(transactions.filter((t) => t.id !== id));
+      }
+    } catch (error) {
+      console.error('Eroare la ștergerea tranzacției:', error);
+    }
+  };
+
 
 
   return (
@@ -33,8 +47,13 @@ function App() {
       
 
       <Dashboard transactions={transactions} />
-      <TransactionForm />
-      <TransactionList transactions={transactions} />
+      <TransactionForm
+      onTransactionAdded={(newTx) => setTransactions([...transactions, newTx])}
+       />
+      <TransactionList 
+        transactions={transactions} 
+        onDelete={handleDelete} 
+      />
     </div>
   );
 }

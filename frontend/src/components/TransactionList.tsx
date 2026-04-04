@@ -2,9 +2,10 @@ import type { Transaction } from "../types"
 
 interface Props {
     transactions: Transaction[];
+    onDelete: (id: number) => void;
 }
 
-export default function TransactionList({ transactions }: Props) {
+export default function TransactionList({ transactions, onDelete }: Props) {
     return (
     <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
       <h2>Lista Tranzacții</h2>
@@ -25,6 +26,14 @@ export default function TransactionList({ transactions }: Props) {
               <td>{t.category.name} ({t.category.type === 'income' ? 'Venit' : 'Cheltuială'})</td>
               <td style={{ color: t.category.type === 'income' ? 'green' : 'red', fontWeight: 'bold' }}>
                 {t.amount} RON
+              </td>
+              <td>
+                <button 
+                  onClick={() => onDelete(t.id)} 
+                  style={{ background: '#dc3545', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}
+                >
+                  Șterge
+                </button>
               </td>
             </tr>
           ))}

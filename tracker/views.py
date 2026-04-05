@@ -2,7 +2,16 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Category, Transaction
-from .serializers import CategorysSrializer, TransactionSerializer
+from .serializers import CategorysSrializer, TransactionSerializer, RegisterSerializer
+from django.contrib.auth.models import User
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permissions_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
 
 @api_view(['GET'])
 def category_list(request):

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import type { Category, Transaction } from '../types';
-// Am importat utilitarul nostru care atașează automat token-ul JWT
 import { fetchWithAuth } from '../utils/api'; 
 
 interface Props {
@@ -22,10 +21,10 @@ export default function TransactionForm({ onTransactionAdded }: Props) {
         if (response.ok) {
           const data = await response.json();
           
-          // UITE AICI: Afișăm în consolă ce am primit!
+         
           console.log("Date primite de la API Categorii:", data);
 
-          // Verificăm dacă Django a "împachetat" datele în "results" (datorită paginării)
+         
           const actualCategories = data.results ? data.results : data;
 
           setCategories(actualCategories);
@@ -70,11 +69,11 @@ export default function TransactionForm({ onTransactionAdded }: Props) {
   };
 
   return (
-    // Aplicăm clasa "card" în loc de stilurile inline
+    
     <div className="card">
       <h2 className="card-title">Adaugă Tranzacție</h2>
       
-      {/* Folosim "form-grid" pentru a alinia elementele frumos pe același rând */}
+    
       <form onSubmit={handleSubmit} className="form-grid">
         <input 
           type="date" 

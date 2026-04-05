@@ -1,39 +1,45 @@
-import { useState, useEffect } from 'react'
-import type { Category, Transaction } from '../types'
-
+import { useState, useEffect } from 'react';
+import type { Category, Transaction } from '../types';
+// Am importat utilitarul nostru care atașează automat token-ul JWT
+import { fetchWithAuth } from '../utils/api'; 
 
 interface Props {
-    onTransactionAdded: (newTransaction: Transaction) => void;
+  onTransactionAdded: (newTransaction: Transaction) => void;
 }
 
+export default function TransactionForm({ onTransactionAdded }: Props) {
+  const [categories, setCategories] = useState<Category[]>([]);
 
-export default function TransactionForm({ onTransactionAdded}: Props) {
+  const [amount, setAmount] = useState('');
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
+  const [categoryId, setCategoryId] = useState('');
 
-    const [categories, setCategories] = useState<Category[]>([]);
+ useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetchWithAuth('http://127.0.0.1:8000/api/categories/');
+        if (response.ok) {
+          const data = await response.json();
+          
+          // UITE AICI: Afișăm în consolă ce am primit!
+          console.log("Date primite de la API Categorii:", data);
 
-    const [amount, setAmount] = useState('');
-    const [description, setDescription] = useState('');
-    const [date, setDate] = useState('');
-    const [categoryId, setCategoryId] = useState('');
+          // Verificăm dacă Django a "împachetat" datele în "results" (datorită paginării)
+          const actualCategories = data.results ? data.results : data;
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try{
-                const response = await fetch('http://127.0.0.1:8000/api/categories/');
-                if(response.ok){
-                    const data = await response.json();
-                    setCategories(data);
-                    if(data.length > 0) setCategoryId(data[0].id.toString());
-                }
-            }catch(error){
-                console.error('Eroare la aducerea categoriilor:', error);
-            }
-        };
-        fetchCategories();
-    }, []);
+          setCategories(actualCategories);
+          if (actualCategories.length > 0) setCategoryId(actualCategories[0].id.toString());
+        }
+      } catch (error) {
+        console.error('Eroare la aducerea categoriilor:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
     const newTxData = {
       amount: amount,
@@ -43,11 +49,9 @@ export default function TransactionForm({ onTransactionAdded}: Props) {
     };
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/transactions/', {
+      const response = await fetchWithAuth('http://127.0.0.1:8000/api/transactions/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+       
         body: JSON.stringify(newTxData),
       });
 
@@ -56,7 +60,6 @@ export default function TransactionForm({ onTransactionAdded}: Props) {
         
         onTransactionAdded(createdTransaction);
         
-       
         setAmount('');
         setDescription('');
         setDate('');
@@ -64,20 +67,25 @@ export default function TransactionForm({ onTransactionAdded}: Props) {
     } catch (error) {
       console.error('Eroare la adăugarea tranzacției:', error);
     }
-    }
+  };
 
-    return (
-    <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
-      <h2>Adaugă Tranzacție</h2>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+  return (
+    // Aplicăm clasa "card" în loc de stilurile inline
+    <div className="card">
+      <h2 className="card-title">Adaugă Tranzacție</h2>
+      
+      {/* Folosim "form-grid" pentru a alinia elementele frumos pe același rând */}
+      <form onSubmit={handleSubmit} className="form-grid">
         <input 
           type="date" 
+          className="form-input"
           value={date} 
           onChange={(e) => setDate(e.target.value)} 
           required 
         />
         <input 
           type="text" 
+          className="form-input"
           placeholder="Descriere" 
           value={description} 
           onChange={(e) => setDescription(e.target.value)} 
@@ -85,19 +93,25 @@ export default function TransactionForm({ onTransactionAdded}: Props) {
         />
         <input 
           type="number" 
+          className="form-input"
           placeholder="Sumă" 
           value={amount} 
           onChange={(e) => setAmount(e.target.value)} 
           required 
         />
-        <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
+        <select 
+          className="form-input"
+          value={categoryId} 
+          onChange={(e) => setCategoryId(e.target.value)} 
+          required
+        >
           {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>
               {cat.name} ({cat.type})
             </option>
           ))}
         </select>
-        <button type="submit" style={{ background: '#007bff', color: 'white', border: 'none', padding: '5px 15px', borderRadius: '4px', cursor: 'pointer' }}>
+        <button type="submit" className="btn-primary">
           Adaugă
         </button>
       </form>

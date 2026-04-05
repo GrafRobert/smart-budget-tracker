@@ -4,12 +4,11 @@ interface Props {
     transactions: Transaction[];
 }
 
-
 export default function Dashboard({transactions}: Props) {
 
     const totalIncome = transactions
         .filter(t => t.category.type === 'income')
-        .reduce((sum, t) => sum + Number(t.amount),0);
+        .reduce((sum, t) => sum + Number(t.amount), 0);
     
     const totalExpense = transactions
         .filter(t => t.category.type === 'expense')
@@ -18,20 +17,32 @@ export default function Dashboard({transactions}: Props) {
     const balance = totalIncome - totalExpense;
 
    return (
-    <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px', marginBottom: '20px', background: '#f9f9f9' }}>
-      <h2>Dashboard (Statistici)</h2>
-      <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '18px' }}>
-        <div>
-          <strong>Venituri: </strong>
-          <span style={{ color: 'green' }}>{totalIncome} RON</span>
+    <div className="card">
+      <h2 className="card-title">Dashboard (Statistici)</h2>
+      
+      <div className="dashboard-grid">
+
+        <div className="stat-box">
+          <span className="stat-label">Venituri</span>
+          <div className="stat-value text-income">
+            {totalIncome} RON
+          </div>
         </div>
-        <div>
-          <strong>Cheltuieli: </strong>
-          <span style={{ color: 'red' }}>{totalExpense} RON</span>
+
+
+        <div className="stat-box">
+          <span className="stat-label">Cheltuieli</span>
+          <div className="stat-value text-expense">
+            {totalExpense} RON
+          </div>
         </div>
-        <div>
-          <strong>Balanță: </strong>
-          <span style={{ fontWeight: 'bold' }}>{balance} RON</span>
+
+
+        <div className="stat-box">
+          <span className="stat-label">Balanță</span>
+          <div className="stat-value" style={{ color: balance >= 0 ? 'var(--text-main)' : 'var(--expense)' }}>
+            {balance} RON
+          </div>
         </div>
       </div>
     </div>

@@ -7,30 +7,35 @@ interface Props {
 
 export default function TransactionList({ transactions, onDelete }: Props) {
     return (
-    <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
-      <h2>Lista Tranzacții</h2>
-      <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
+    <div className="card">
+      <h2 className="card-title">Lista Tranzacții</h2>
+      <table className="data-table">
         <thead>
-          <tr style={{ borderBottom: '2px solid #eee' }}>
+          <tr>
             <th>Data</th>
             <th>Descriere</th>
             <th>Categorie</th>
             <th>Sumă</th>
+            <th>Acțiuni</th>
           </tr>
         </thead>
         <tbody>
           {transactions.map((t) => (
-            <tr key={t.id} style={{ borderBottom: '1px solid #eee' }}>
+            <tr key={t.id}>
               <td>{t.date}</td>
-              <td>{t.description}</td>
-              <td>{t.category.name} ({t.category.type === 'income' ? 'Venit' : 'Cheltuială'})</td>
-              <td style={{ color: t.category.type === 'income' ? 'green' : 'red', fontWeight: 'bold' }}>
-                {t.amount} RON
-              </td>
+              <td style={{ fontWeight: 500 }}>{t.description}</td>
               <td>
+                <span className="badge">
+                  {t.category.name}
+                </span>
+              </td>
+              <td className={t.category.type === 'income' ? 'text-income' : 'text-expense'} style={{ fontWeight: 700 }}>
+                {t.category.type === 'income' ? '+' : '-'}{t.amount} RON
+              </td>
+              <td style={{ textAlign: 'right' }}>
                 <button 
                   onClick={() => onDelete(t.id)} 
-                  style={{ background: '#dc3545', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}
+                  className="btn-danger"
                 >
                   Șterge
                 </button>
@@ -39,6 +44,11 @@ export default function TransactionList({ transactions, onDelete }: Props) {
           ))}
         </tbody>
       </table>
+      {transactions.length === 0 && (
+        <p style={{ textAlign: 'center', color: 'var(--text-muted)', marginTop: '20px' }}>
+          Nu există tranzacții înregistrate.
+        </p>
+      )}
     </div>
   );
 }
